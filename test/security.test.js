@@ -1,5 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const path = require('node:path');
 const { isSameOriginRequest, isStateChangingMethod } = require('../server/security');
 const { resolvePublicPath } = require('../server/utils/staticPath');
 const { applySecurityHeaders } = require('../server/security');
@@ -45,8 +46,8 @@ test('router rejects cross-origin state-changing API requests', async () => {
 });
 
 test('public path resolution rejects encoded and prefix traversal', () => {
-  const publicDir = 'C:\\app\\public';
-  assert.equal(resolvePublicPath(publicDir, '/index.html'), 'C:\\app\\public\\index.html');
+  const publicDir = path.resolve('app', 'public');
+  assert.equal(resolvePublicPath(publicDir, '/index.html'), path.join(publicDir, 'index.html'));
   assert.equal(resolvePublicPath(publicDir, '/%2e%2e/server.js'), null);
   assert.equal(resolvePublicPath(publicDir, '/%2e%2e%5cserver.js'), null);
 });
