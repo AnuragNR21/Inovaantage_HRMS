@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Payroll Reports - Inovaantage Payroll Portal</title><link rel="stylesheet" href="/css/style.css"></head>
+<body><div class="app-shell">
+  <aside class="sidebar"><div class="brand"><img class="brand-logo" src="/assets/inovaantage-logo.png" alt="Inovaantage"></div><nav data-app-nav aria-label="Primary navigation"></nav><div class="user-box"><div class="name" data-user-name>-</div><div class="role" data-user-role>-</div><button class="logout-btn" data-logout>Log Out</button></div></aside>
+  <main class="main-content" data-page-permission="PAYROLL_VIEW,SALARY_VIEW">
+    <div class="topbar"><div><button class="hamburger" data-hamburger>[menu]</button><h1>Payroll Reports</h1><p>Monthly payroll runs, totals, availability, and delivery progress.</p></div></div>
+    <div id="reportAlert"></div>
+    <section class="grid grid-4"><div class="card stat-card"><span class="stat-label">Payroll runs</span><strong class="stat-value" id="runCount">0</strong></div><div class="card stat-card"><span class="stat-label">Employees processed</span><strong class="stat-value" id="employeeCount">0</strong></div><div class="card stat-card"><span class="stat-label">Total net payroll</span><strong class="stat-value" id="totalNet">Rs. 0</strong></div><div class="card stat-card"><span class="stat-label">Runs on hold</span><strong class="stat-value" id="holdCount">0</strong></div></section>
+    <section class="card view-section"><div class="section-heading"><div><h2>Payroll run history</h2><p class="muted">Most recent payroll periods appear first. Download a detailed employee-level salary dataset from any run.</p></div><button class="btn btn-outline" id="exportRunsBtn" type="button">Export summary CSV</button></div><div class="table-wrap"><table><thead><tr><th>Period</th><th>Processed</th><th>Gross earnings</th><th>Deductions</th><th>Net payroll</th><th>Payslips</th><th>Emails sent</th><th>Updated</th><th>Status</th><th>Export</th></tr></thead><tbody id="runReportBody"><tr><td colspan="10" class="empty-state">Loading payroll reports...</td></tr></tbody></table></div></section>
+  </main>
+</div><script src="/js/common.js"></script><script src="/js/payroll-reports.js"></script></body></html>

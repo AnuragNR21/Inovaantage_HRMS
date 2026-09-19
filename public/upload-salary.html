@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Upload Salary — Inovaantage Payroll Portal</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><img class="brand-logo" src="/assets/inovaantage-logo.png" alt="Inovaantage"></div>
+    <nav data-app-nav aria-label="Primary navigation">
+      <a href="/dashboard.html" data-permission="DASHBOARD_VIEW">📊 Dashboard</a>
+      <a href="/employees.html" data-permission="EMPLOYEE_VIEW">👥 Employees</a>
+      <a href="/upload-salary.html" class="active" data-permission="PAYROLL_UPLOAD,PAYROLL_PROCESS,SALARY_UPDATE">⬆️ Upload Salary</a>
+      <a href="/payroll-history.html" data-permission-alternatives="PAYROLL_VIEW+SALARY_VIEW|PAYROLL_SELF_VIEW+SALARY_SELF_VIEW">🧾 Payroll History</a>
+    </nav>
+    <div class="user-box">
+      <div class="name" data-user-name>—</div>
+      <div class="role" data-user-role>—</div>
+      <button class="logout-btn" data-logout>Log Out</button>
+    </div>
+  </aside>
+
+  <main class="main-content" data-page-permission="PAYROLL_UPLOAD,PAYROLL_PROCESS,SALARY_UPDATE">
+    <div class="topbar">
+      <div>
+        <button class="hamburger" data-hamburger>☰</button>
+        <h1>Upload Monthly Salary</h1>
+        <p>Upload the salary Excel sheet for a pay period. Records are matched to employees by Employee Code.</p>
+      </div>
+    </div>
+
+    <div id="alertBox"></div>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <h2 style="margin-top:0;font-size:16px;">1. Select Pay Period</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="payMonth">Month</label>
+            <select id="payMonth"></select>
+          </div>
+          <div class="form-group">
+            <label for="payYear">Year</label>
+            <input type="number" id="payYear" min="2000" max="2100">
+          </div>
+        </div>
+
+        <h2 style="font-size:16px;">2. Select Excel File</h2>
+        <div class="upload-dropzone" id="dropzone">
+          <div id="dropzoneText">Click to choose file, or drag &amp; drop here<br><small>.xlsx only, up to 10 MB</small></div>
+          <input type="file" id="fileInput" multiple accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display:none;">
+        </div>
+
+        <label class="import-checkbox" for="requireAllEmployees">
+          <input type="checkbox" id="requireAllEmployees" checked>
+          Require every active employee to be present
+        </label>
+
+        <button class="btn btn-primary btn-block" id="uploadBtn" style="margin-top:18px;" data-permission="PAYROLL_UPLOAD,PAYROLL_PROCESS,SALARY_UPDATE" disabled>Validate &amp; Preview</button>
+      </div>
+
+      <div class="card">
+        <h2 style="margin-top:0;font-size:16px;">Expected Columns</h2>
+        <p style="color:var(--text-muted);font-size:13.5px;">
+          The header row can be anywhere near the top of the sheet and is detected automatically.
+          Required: <strong>Employee Code</strong> OR an employee name column (e.g. "Particulars"/"Name").
+          Recognized optional columns (any of these names, case-insensitive):
+        </p>
+        <ul style="font-size:12.5px;color:var(--text-muted);line-height:1.9;">
+          <li>Working Days, Present, Absent, Paid Leave, LOP Days, Half Days, Late Marks, OT Hours</li>
+          <li>Basic Salary, HRA, DA, Conveyance, Medical Allowance, Special Allowance, Professional Development, Other Allowance, Food Allowance, Bonus</li>
+          <li>PF/EPF, ESI, Professional Tax/PT, Income Tax/TDS</li>
+          <li>Employer Contribution, Lop (amount), Gross Salary, Remarks</li>
+          <li>Total Earnings, Total Deductions, Net Salary (used exactly as calculated in the sheet if present)</li>
+        </ul>
+        <p style="font-size:12.5px;color:var(--text-muted);">
+          Rows are matched to an existing employee by Employee Code if the sheet has one, otherwise by full name
+          (must match the employee's name in the Employees list exactly, case-insensitive). Unmatched rows are
+          reported before import. Summary/"Total" rows are automatically ignored.
+          Validation never changes payroll data. Multiple files can contribute to the same month while its payroll
+          remains in the validated state. Duplicate employees must be resolved before confirmation.
+        </p>
+
+        <div id="resultBox" class="result-box"></div>
+      </div>
+    </div>
+
+    <section class="card" style="margin-top:18px;">
+      <div class="section-heading"><div><h2>Uploaded payroll files</h2><p class="muted">Delete pending, expired, failed, or imported files to remove their related payroll data.</p></div><button class="btn btn-outline btn-sm" id="refreshImportsBtn" type="button">Refresh</button></div>
+      <div class="table-wrap"><table><thead><tr><th>File</th><th>Period</th><th>Rows</th><th>Uploaded</th><th>Payroll status</th><th>Action</th></tr></thead><tbody id="importsTableBody"><tr><td colspan="6" class="empty-state">Loading uploaded files...</td></tr></tbody></table></div>
+    </section>
+  </main>
+</div>
+
+<script src="/js/common.js"></script>
+<script src="/js/upload-salary.js"></script>
+</body>
+</html>

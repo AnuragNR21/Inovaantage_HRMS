@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employees — Inovaantage Payroll Portal</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><img class="brand-logo" src="/assets/inovaantage-logo.png" alt="Inovaantage"></div>
+    <nav data-app-nav aria-label="Primary navigation">
+      <a href="/dashboard.html" data-permission="DASHBOARD_VIEW">📊 Dashboard</a>
+      <a href="/employees.html" class="active" data-permission="EMPLOYEE_VIEW">👥 Employees</a>
+      <a href="/upload-salary.html" data-permission="PAYROLL_UPLOAD,PAYROLL_PROCESS,SALARY_UPDATE">⬆️ Upload Salary</a>
+      <a href="/payroll-history.html" data-permission-alternatives="PAYROLL_VIEW+SALARY_VIEW|PAYROLL_SELF_VIEW+SALARY_SELF_VIEW">🧾 Payroll History</a>
+    </nav>
+    <div class="user-box">
+      <div class="name" data-user-name>—</div>
+      <div class="role" data-user-role>—</div>
+      <button class="logout-btn" data-logout>Log Out</button>
+    </div>
+  </aside>
+
+  <main class="main-content" data-page-permission="EMPLOYEE_VIEW">
+    <div class="topbar">
+      <div>
+        <button class="hamburger" data-hamburger>☰</button>
+        <h1>Employee Management</h1>
+        <p>Add, edit, search, and manage employee records.</p>
+      </div>
+      <button class="btn btn-primary" id="addEmployeeBtn" data-permission="EMPLOYEE_CREATE">+ Add Employee</button>
+    </div>
+
+    <div id="alertBox"></div>
+
+    <div class="card">
+      <div class="toolbar">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search by Employee Code or Name...">
+        <select id="departmentFilter"><option value="">All Departments</option></select>
+        <select id="statusFilter">
+          <option value="">All Status</option>
+          <option value="ACTIVE">Active</option>
+          <option value="INACTIVE">Inactive</option>
+        </select>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Code</th><th>Name</th><th>Department</th><th>Designation</th>
+              <th>Email</th><th>Status</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="employeeTableBody">
+            <tr><td colspan="7" class="empty-state">Loading employees...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Add / Edit Modal -->
+<div class="modal-overlay" id="employeeModal">
+  <div class="modal">
+    <h2 id="modalTitle">Add Employee</h2>
+    <div id="modalAlert"></div>
+    <form id="employeeForm">
+      <input type="hidden" id="employeeId">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="employeeCode">Employee Code *</label>
+          <input type="text" id="employeeCode" required placeholder="INV-011">
+        </div>
+        <div class="form-group">
+          <label for="fullName">Full Name *</label>
+          <input type="text" id="fullName" required placeholder="Ananya Patnaik">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="department">Department</label>
+          <input type="text" id="department" placeholder="Human Resources">
+        </div>
+        <div class="form-group">
+          <label for="designation">Designation</label>
+          <input type="text" id="designation" placeholder="HR Manager">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="name@inovaantage.com">
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone</label>
+          <input type="text" id="phone" placeholder="9876543210">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="dateOfJoining">Date of Joining</label>
+          <input type="date" id="dateOfJoining">
+        </div>
+        <div class="form-group">
+          <label for="status">Status</label>
+          <select id="status">
+            <option value="ACTIVE">Active</option>
+            <option value="INACTIVE">Inactive</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="bankAccount">Bank Account No.</label>
+          <input type="text" id="bankAccount" placeholder="50100234567890">
+        </div>
+        <div class="form-group">
+          <label for="bankName">Bank Name</label>
+          <input type="text" id="bankName" placeholder="HDFC Bank">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="ifscCode">IFSC Code</label>
+          <input type="text" id="ifscCode" placeholder="HDFC0001234">
+        </div>
+        <div class="form-group">
+          <label for="panNo">PAN Card No.</label>
+          <input type="text" id="panNo" placeholder="ABCDE1234F" maxlength="10" style="text-transform:uppercase" pattern="[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}" title="PAN format: 5 letters, 4 digits, 1 letter (e.g. ABCDE1234F)">
+        </div>
+      </div>
+
+      <div class="modal-close-row">
+        <button type="button" class="btn btn-outline" id="cancelModalBtn">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="saveEmployeeBtn">Save Employee</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="/js/common.js"></script>
+<script src="/js/employees.js"></script>
+</body>
+</html>

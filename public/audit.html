@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audit - Inovaantage Payroll Portal</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar"><div class="brand"><img class="brand-logo" src="/assets/inovaantage-logo.png" alt="Inovaantage"></div><nav data-app-nav aria-label="Primary navigation"></nav>
+    <div class="user-box"><div class="name" data-user-name>-</div><div class="role" data-user-role>-</div><button class="logout-btn" data-logout>Log Out</button></div>
+  </aside>
+  <main class="main-content" data-page-permission="AUDIT_VIEW">
+    <div class="topbar"><div><button class="hamburger" data-hamburger>[menu]</button><h1>Audit Trail</h1><p>Security-sensitive actions and payroll operations.</p></div></div>
+    <div id="alertBox"></div>
+    <div class="card"><div class="section-heading"><div><h2>Recent events</h2><p class="muted">Sensitive document contents, passwords, and tokens are excluded.</p></div><span class="badge badge-info">Read only</span></div>
+      <div class="table-wrap"><table><thead><tr><th>Time</th><th>Action</th><th>Resource</th><th>Actor</th><th>Result</th><th>Metadata</th></tr></thead><tbody id="auditTableBody"><tr><td colspan="6" class="empty-state">Loading audit events...</td></tr></tbody></table></div>
+    </div>
+  </main>
+</div>
+<script src="/js/common.js"></script><script src="/js/audit.js"></script>
+</body>
+</html>

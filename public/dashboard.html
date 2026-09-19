@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Inovaantage Payroll Portal</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><img class="brand-logo" src="/assets/inovaantage-logo.png" alt="Inovaantage"></div>
+    <nav data-app-nav aria-label="Primary navigation">
+      <a href="/dashboard.html" class="active" data-permission="DASHBOARD_VIEW">📊 Dashboard</a>
+      <a href="/employees.html" data-permission="EMPLOYEE_VIEW">👥 Employees</a>
+      <a href="/upload-salary.html" data-permission="PAYROLL_UPLOAD,PAYROLL_PROCESS,SALARY_UPDATE">⬆️ Upload Salary</a>
+      <a href="/payroll-history.html" data-permission-alternatives="PAYROLL_VIEW+SALARY_VIEW|PAYROLL_SELF_VIEW+SALARY_SELF_VIEW">🧾 Payroll History</a>
+    </nav>
+    <div class="user-box">
+      <div class="name" data-user-name>—</div>
+      <div class="role" data-user-role>—</div>
+      <button class="logout-btn" data-logout>Log Out</button>
+    </div>
+  </aside>
+
+  <main class="main-content" data-page-permission="DASHBOARD_VIEW">
+    <div class="topbar">
+      <div>
+        <button class="hamburger" data-hamburger>☰</button>
+        <h1>Dashboard</h1>
+        <p>Overview of employees and payroll activity.</p>
+      </div>
+    </div>
+
+    <div id="alertBox"></div>
+
+    <div class="grid grid-4" id="statCards">
+      <div class="card stat-card">
+        <div class="stat-label">Total Employees</div>
+        <div class="stat-value" id="statTotalEmp">—</div>
+        <div class="stat-sub" id="statActiveEmp">—</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-label">Payroll Records</div>
+        <div class="stat-value" id="statPayrollCount">—</div>
+        <div class="stat-sub">All periods, all employees</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-label">Latest Period Payout</div>
+        <div class="stat-value" id="statLatestTotal">—</div>
+        <div class="stat-sub" id="statLatestPeriod">—</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-label">Departments</div>
+        <div class="stat-value" id="statDeptCount">—</div>
+        <div class="stat-sub">Across all employees</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:20px;">
+      <h2 style="margin-top:0;font-size:16px;">Employees by Department</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Department</th><th>Employee Count</th></tr></thead>
+          <tbody id="deptTableBody"><tr><td colspan="2" class="empty-state">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid grid-2" style="margin-top:20px;">
+      <a href="/employees.html" class="card" style="text-decoration:none;color:inherit;" data-permission="EMPLOYEE_VIEW">
+        <h3 style="margin:0 0 6px;color:var(--primary);">👥 Manage Employees</h3>
+        <p style="margin:0;color:var(--text-muted);font-size:13.5px;">Add, edit, search and remove employee records.</p>
+      </a>
+      <a href="/upload-salary.html" class="card" style="text-decoration:none;color:inherit;" data-permission="PAYROLL_UPLOAD,PAYROLL_PROCESS,SALARY_UPDATE">
+        <h3 style="margin:0 0 6px;color:var(--primary);">⬆️ Upload Monthly Salary</h3>
+        <p style="margin:0;color:var(--text-muted);font-size:13.5px;">Upload an Excel sheet to generate this month's payslips.</p>
+      </a>
+      <a href="/payslips.html" class="card" style="text-decoration:none;color:inherit;" data-permission-alternatives="PAYSLIP_VIEW+PAYSLIP_DOWNLOAD|PAYSLIP_SELF_VIEW+PAYSLIP_SELF_DOWNLOAD">
+        <h3 style="margin:0 0 6px;color:var(--primary);"># Payslips</h3>
+        <p style="margin:0;color:var(--text-muted);font-size:13.5px;">View generated payslips and download authorized PDFs.</p>
+      </a>
+      <a href="/payroll-reports.html" class="card" style="text-decoration:none;color:inherit;" data-permission="PAYROLL_VIEW,SALARY_VIEW">
+        <h3 style="margin:0 0 6px;color:var(--primary);">[] Payroll Reports</h3>
+        <p style="margin:0;color:var(--text-muted);font-size:13.5px;">Review filtered totals and export an operational report.</p>
+      </a>
+    </div>
+  </main>
+</div>
+
+<script src="/js/common.js"></script>
+<script src="/js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings - Inovaantage Payroll Portal</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar"><div class="brand"><img class="brand-logo" src="/assets/inovaantage-logo.png" alt="Inovaantage"></div><nav data-app-nav aria-label="Primary navigation"></nav>
+    <div class="user-box"><div class="name" data-user-name>-</div><div class="role" data-user-role>-</div><button class="logout-btn" data-logout>Log Out</button></div>
+  </aside>
+  <main class="main-content" data-page-permission="SYSTEM_CONFIGURE">
+    <div class="topbar"><div><button class="hamburger" data-hamburger>[menu]</button><h1>Settings</h1><p>Review runtime security and notification configuration.</p></div></div>
+    <div id="alertBox"></div>
+    <section class="card view-section"><div class="section-heading"><div><h2>Required configuration</h2><p class="muted">Operational settings that must be checked before production use.</p></div><span class="badge badge-info">Read only</span></div><div class="config-note">Database credentials, session secrets, HTTPS settings, SMTP credentials, upload limits, and Oracle connection settings are managed through the server environment. They are intentionally not editable in the browser.</div><div class="table-wrap" style="margin-top:16px"><table><thead><tr><th>Requirement</th><th>Purpose</th><th>Current check</th></tr></thead><tbody><tr><td>Oracle database</td><td>Payroll, employee, and audit persistence</td><td><span class="badge badge-active">Connected</span></td></tr><tr><td>Secure session</td><td>Protects authenticated access</td><td><span class="badge badge-info">Server managed</span></td></tr><tr><td>SMTP service</td><td>Delivers payslips by email</td><td id="smtpValue"><span class="badge badge-inactive">Check configuration</span></td></tr><tr><td>Backup and monitoring</td><td>Operational recovery and alerts</td><td><span class="badge badge-inactive">Verify operationally</span></td></tr></tbody></table></div></section>
+    <div class="grid grid-2"><div class="card setting-card"><span class="stat-label">Environment</span><strong id="environmentValue">—</strong></div><div class="card setting-card"><span class="stat-label">Session timeout</span><strong id="sessionTtlValue">—</strong></div><div class="card setting-card"><span class="stat-label">Absolute session timeout</span><strong id="absoluteTtlValue">—</strong></div><div class="card setting-card"><span class="stat-label">Email notifications</span><strong id="emailValue">—</strong></div></div>
+    <section class="card view-section"><div class="section-heading"><div><h2>Personal security</h2><p class="muted">Keep your own account credentials under your control.</p></div><a class="btn btn-primary" href="/change-password.html">Change password</a></div><p class="muted">System configuration is intentionally managed on the server. Account password changes are available here because they affect only your signed-in user.</p></section>
+  </main>
+</div>
+<script src="/js/common.js"></script><script src="/js/settings.js"></script>
+</body>
+</html>

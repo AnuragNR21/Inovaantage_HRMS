@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — Inovaantage Payroll Portal</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="login-page">
+  <div class="login-card">
+    <div class="brand-icon"><img class="login-brand-logo" src="/assets/inovaantage-logo.png" alt="Inovaantage"></div>
+    <h1>Inovaantage Payroll Portal</h1>
+    <p class="subtitle">Stay Digitally Ahead With Us</p>
+
+    <div id="alertBox"></div>
+
+    <form class="login-form" id="loginForm">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="admin" autocomplete="username" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password" required maxlength="72">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" id="loginBtn">Sign In</button>
+      <div style="text-align:right;margin-top:12px;font-size:13px;">
+        <button type="button" class="link-button" id="forgotPasswordBtn">Forgot password?</button>
+      </div>
+    </form>
+
+    <form class="login-form" id="forgotPasswordForm" hidden>
+      <div class="form-group">
+        <label for="resetUsername">Username</label>
+        <input type="text" id="resetUsername" autocomplete="username" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Request Reset</button>
+      <button type="button" class="link-button" id="backToLoginBtn">Back to sign in</button>
+    </form>
+
+    <div class="login-footer">
+      &copy; <span id="year"></span> Inovaantage Systems Pvt Ltd. All rights reserved.
+    </div>
+  </div>
+
+  <script src="/js/common.js"></script>
+  <script src="/js/login.js"></script>
+</body>
+</html>

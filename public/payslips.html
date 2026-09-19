@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payslips - Inovaantage Payroll Portal</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar"><div class="brand"><img class="brand-logo" src="/assets/inovaantage-logo.png" alt="Inovaantage"></div><nav data-app-nav aria-label="Primary navigation"></nav>
+    <div class="user-box"><div class="name" data-user-name>-</div><div class="role" data-user-role>-</div><button class="logout-btn" data-logout>Log Out</button></div>
+  </aside>
+  <main class="main-content" data-page-permission-alternatives="PAYSLIP_VIEW|PAYSLIP_SELF_VIEW">
+    <div class="topbar"><div><button class="hamburger" data-hamburger>[menu]</button><h1>Payslips</h1><p>Find, download, and email finalized employee payslips.</p></div></div>
+    <div id="alertBox"></div>
+    <section class="card">
+      <div class="toolbar"><input type="text" id="payslipSearch" class="search-input" placeholder="Search employee code or name..."><select id="payslipMonth"><option value="">All months</option></select><input type="number" id="payslipYear" placeholder="Year" min="2000" max="2100" style="width:110px;"><button class="btn btn-outline" id="previousPayslipBtn" type="button">Previous month</button><button class="btn btn-primary" id="downloadSelectedBtn" type="button" disabled>Download selected</button><button class="btn btn-outline" id="emailSelectedBtn" type="button" disabled>Email selected</button></div>
+      <div class="section-heading"><div><h2>Generated payslips</h2><p class="muted">Only finalized and generated payslips visible to your account are shown.</p></div><span class="badge badge-info" id="payslipCount">0 available</span></div>
+      <div class="table-wrap"><table><thead><tr><th><input type="checkbox" id="selectAllPayslips" aria-label="Select all visible payslips"></th><th>Employee</th><th>Department</th><th>Period</th><th>Net salary</th><th>Email</th><th>Generated</th><th>Actions</th></tr></thead><tbody id="payslipTableBody"><tr><td colspan="8" class="empty-state">Loading payslips...</td></tr></tbody></table></div>
+    </section>
+  </main>
+</div>
+<script src="/js/common.js"></script><script src="/js/payslips.js"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payroll History — Inovaantage Payroll Portal</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><img class="brand-logo" src="/assets/inovaantage-logo.png" alt="Inovaantage"></div>
+    <nav data-app-nav aria-label="Primary navigation">
+      <a href="/dashboard.html" data-permission="DASHBOARD_VIEW">📊 Dashboard</a>
+      <a href="/employees.html" data-permission="EMPLOYEE_VIEW">👥 Employees</a>
+      <a href="/upload-salary.html" data-permission="PAYROLL_UPLOAD,PAYROLL_PROCESS,SALARY_UPDATE">⬆️ Upload Salary</a>
+      <a href="/payroll-history.html" class="active" data-permission-alternatives="PAYROLL_VIEW+SALARY_VIEW|PAYROLL_SELF_VIEW+SALARY_SELF_VIEW">🧾 Payroll History</a>
+    </nav>
+    <div class="user-box">
+      <div class="name" data-user-name>—</div>
+      <div class="role" data-user-role>—</div>
+      <button class="logout-btn" data-logout>Log Out</button>
+    </div>
+  </aside>
+
+  <main class="main-content" data-page-permission-alternatives="PAYROLL_VIEW+SALARY_VIEW|PAYROLL_SELF_VIEW+SALARY_SELF_VIEW">
+    <div class="topbar">
+      <div>
+        <button class="hamburger" data-hamburger>☰</button>
+        <h1>Payroll History</h1>
+        <p>Review payroll values, approvals, and email delivery by period.</p>
+      </div>
+    </div>
+
+    <div id="alertBox"></div>
+
+    <div class="card">
+      <div class="toolbar">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search by Employee ID, Name, or Department...">
+        <select id="monthFilter"><option value="">All Months</option></select>
+        <input type="number" id="yearFilter" placeholder="Year" style="width:110px;">
+      </div>
+
+      <div id="bulkActions" class="toolbar" style="display:none; margin-top:12px; align-items:center;">
+        <label style="display:flex; align-items:center; gap:8px; font-size:13px;"><input type="checkbox" id="selectAllRows"> Select all visible</label>
+        <span id="selectedCount" class="muted">0 selected</span>
+        <button class="btn btn-outline btn-sm" id="approveSelectedBtn" type="button">Approve selected</button>
+        <button class="btn btn-outline btn-sm" id="finalizeSelectedBtn" type="button">Finalize selected</button>
+        <button class="btn btn-outline btn-sm" id="holdSelectedBtn" type="button">Hold selected</button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th><input type="checkbox" id="selectAllHeader" aria-label="Select all payroll rows"></th><th>Employee Code</th><th>Name</th><th>Department</th><th>Period</th>
+              <th>Total Earnings</th><th>Deductions</th><th>Net Salary</th><th>Payroll Status</th><th>Email Status</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="historyTableBody">
+            <tr><td colspan="11" class="empty-state">Loading payroll history...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="/js/common.js"></script>
+<script src="/js/payroll-history.js"></script>
+</body>
+</html>

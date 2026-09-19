@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Users - Inovaantage Payroll Portal</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar"><div class="brand"><img class="brand-logo" src="/assets/inovaantage-logo.png" alt="Inovaantage"></div><nav data-app-nav aria-label="Primary navigation"></nav>
+    <div class="user-box"><div class="name" data-user-name>-</div><div class="role" data-user-role>-</div><button class="logout-btn" data-logout>Log Out</button></div>
+  </aside>
+  <main class="main-content" data-page-permission="USER_VIEW">
+    <div class="topbar"><div><button class="hamburger" data-hamburger>[menu]</button><h1>Users</h1><p>Create and maintain portal user accounts.</p></div><button class="btn btn-primary" id="addUserBtn" data-permission="USER_CREATE,ROLE_ASSIGN">Add user</button></div>
+    <div id="alertBox"></div>
+    <div class="card"><div class="section-heading"><div><h2>Portal Users</h2><p class="muted">Manage account information and access status.</p></div></div>
+      <div class="table-wrap"><table><thead><tr><th>Username</th><th>Name</th><th>Status</th><th>Last login</th><th>Actions</th></tr></thead><tbody id="usersTableBody"><tr><td colspan="5" class="empty-state">Loading users...</td></tr></tbody></table></div>
+    </div>
+  </main>
+</div>
+<div class="modal-overlay" id="userModal"><div class="modal"><div class="section-heading"><div><h2 id="userModalTitle">Add user</h2><p class="muted">Create an account with the minimum access it needs.</p></div><button class="btn btn-outline btn-sm" type="button" id="closeUserModal">Close</button></div><div id="userModalAlert"></div><form id="userForm"><input type="hidden" id="userId"><div class="form-row"><div class="form-group"><label for="userUsername">Username</label><input id="userUsername" required pattern="[A-Za-z0-9._-]{3,60}"></div><div class="form-group"><label for="userFullName">Full name</label><input id="userFullName" required></div></div><div class="form-row"><div class="form-group"><label for="userEmail">Email</label><input id="userEmail" type="email"></div><div class="form-group" id="userPasswordGroup"><label for="userPassword">Temporary password</label><input id="userPassword" type="password" minlength="12" maxlength="72"></div></div><div class="form-group" id="initialRoleGroup"><label>Initial role</label><div id="roleChoices" class="role-choice-list"></div><p class="muted">Further role changes are managed from Roles & Permissions.</p></div><div class="modal-close-row"><button class="btn btn-outline" type="button" id="cancelUserModal">Cancel</button><button class="btn btn-primary" type="submit" id="saveUserBtn">Create user</button></div></form></div></div>
+<script src="/js/common.js"></script><script src="/js/admin-users.js"></script>
+</body>
+</html>
