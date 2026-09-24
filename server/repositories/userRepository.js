@@ -146,6 +146,34 @@ async function deactivateUser(userId) {
   });
 }
 
+async function activateUser(userId) {
+  return db.execute(
+    `UPDATE app_users SET is_active = 1, failed_login_count = 0, locked_until = NULL
+      WHERE user_id = :userId`,
+    { userId }, {}, true
+  );
+}
+
+async function deleteUser(userId) {
+  return db.withConnection(async (conn) => {
+    const history = await conn.execute(
+      `SELECT
+         (SELECT COUNT(*) FROM payroll_imports WHERE created_by = :userId) AS import_count,
+         (SELECT COUNT(*) FROM payroll_runs WHERE created_by = :userId OR approved_by = :userId OR finalized_by = :userId) AS run_count`,
+      { userId }
+    );
+    if (Number(history.rows[0].IMPORT_COUNT) > 0 || Number(history.rows[0].RUN_COUNT) > 0) {
+      return { blocked: true, rowsAffected: 0 };
+    }
+    await conn.execute('DELETE FROM password_reset_tokens WHERE user_id = :userId', { userId });
+    await conn.execute('DELETE FROM user_sessions WHERE user_id = :userId', { userId });
+    await conn.execute('DELETE FROM auth_user_roles WHERE user_id = :userId', { userId });
+    const result = await conn.execute('DELETE FROM app_users WHERE user_id = :userId', { userId });
+    await conn.commit();
+    return { blocked: false, rowsAffected: result.rowsAffected };
+  });
+}
+
 async function replaceRoles(userId, roleCodes, assignedBy) {
   return db.withConnection(async (conn) => {
     const roles = await resolveRoles(conn, roleCodes);
@@ -179,5 +207,5 @@ async function replaceRoles(userId, roleCodes, assignedBy) {
 
 module.exports = {
   listUsers, getUser, createUser, updateUser, countActiveSystemAdmins,
-  deactivateUser, replaceRoles
+  deactivateUser, activateUser, deleteUser, replaceRoles
 };

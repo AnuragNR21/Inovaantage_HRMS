@@ -48,6 +48,22 @@ async function deactivateUser(req, res, userId) {
   } catch (err) { return handleError(res, err); }
 }
 
+async function activateUser(req, res, userId) {
+  try {
+    await userService.activateUser(userId);
+    await auditService.record({ actorUserId: req.session.userId, action: 'USER_ACTIVATED', resourceType: 'USER', resourceId: userId });
+    return sendJson(res, 200, { success: true });
+  } catch (err) { return handleError(res, err); }
+}
+
+async function deleteUser(req, res, userId) {
+  try {
+    await userService.deleteUser(userId, req.session.userId);
+    await auditService.record({ actorUserId: req.session.userId, action: 'USER_DELETED', resourceType: 'USER', resourceId: userId });
+    return sendJson(res, 200, { success: true });
+  } catch (err) { return handleError(res, err); }
+}
+
 async function replaceRoles(req, res, userId) {
   let body;
   try { body = await readJsonBody(req); } catch (err) { return sendError(res, 400, err.message, 'INVALID_REQUEST'); }
@@ -69,6 +85,6 @@ function rejectDirectPermissions(req, res) {
 }
 
 module.exports = {
-  listUsers, getUser, createUser, updateUser, deactivateUser,
+  listUsers, getUser, createUser, updateUser, deactivateUser, activateUser, deleteUser,
   replaceRoles, listRoles, rejectDirectPermissions
 };

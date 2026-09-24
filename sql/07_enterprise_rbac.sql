@@ -82,6 +82,7 @@ BEGIN
   put_permission('USER_CREATE', 'Create portal users.');
   put_permission('USER_UPDATE', 'Update portal users.');
   put_permission('USER_DEACTIVATE', 'Deactivate portal users.');
+  put_permission('USER_DELETE', 'Permanently delete portal users without retained payroll history.');
   put_permission('ROLE_VIEW', 'View roles and their permissions.');
   put_permission('ROLE_ASSIGN', 'Assign roles to users.');
   put_permission('EMPLOYEE_VIEW', 'View employee records.');
@@ -109,6 +110,7 @@ BEGIN
   grant_permission('SYSTEM_ADMIN', 'USER_CREATE');
   grant_permission('SYSTEM_ADMIN', 'USER_UPDATE');
   grant_permission('SYSTEM_ADMIN', 'USER_DEACTIVATE');
+  grant_permission('SYSTEM_ADMIN', 'USER_DELETE');
   grant_permission('SYSTEM_ADMIN', 'ROLE_VIEW');
   grant_permission('SYSTEM_ADMIN', 'ROLE_ASSIGN');
   grant_permission('SYSTEM_ADMIN', 'AUDIT_VIEW');

@@ -28,9 +28,12 @@ async function loadUsers() {
     if (!users.length) { usersBody.innerHTML = '<tr><td colspan="5" class="empty-state">No users found.</td></tr>'; return; }
     const canEdit = hasPermission('USER_UPDATE');
     const canDeactivate = hasPermission('USER_DEACTIVATE');
-    usersBody.innerHTML = users.map((user) => `<tr><td><strong>${escapeHtml(user.USERNAME)}</strong></td><td>${escapeHtml(user.FULL_NAME || '-')}</td><td>${user.IS_ACTIVE === 1 ? '<span class="badge badge-active">Active</span>' : '<span class="badge badge-inactive">Inactive</span>'}</td><td>${fmtDate(user.LAST_LOGIN_AT)}</td><td class="actions-cell">${canEdit ? `<button class="btn btn-outline btn-sm" type="button" data-edit-user="${user.USER_ID}">Edit</button>` : ''}${canDeactivate && user.IS_ACTIVE === 1 ? `<button class="btn btn-danger btn-sm" type="button" data-deactivate-user="${user.USER_ID}">Deactivate</button>` : ''}</td></tr>`).join('');
+    const canDelete = hasPermission('USER_DELETE');
+    usersBody.innerHTML = users.map((user) => `<tr><td><strong>${escapeHtml(user.USERNAME)}</strong></td><td>${escapeHtml(user.FULL_NAME || '-')}</td><td>${user.IS_ACTIVE === 1 ? '<span class="badge badge-active">Active</span>' : '<span class="badge badge-inactive">Inactive</span>'}</td><td>${fmtDate(user.LAST_LOGIN_AT)}</td><td class="actions-cell">${canEdit ? `<button class="btn btn-outline btn-sm" type="button" data-edit-user="${user.USER_ID}">Edit</button>` : ''}${canDeactivate && user.IS_ACTIVE === 1 ? `<button class="btn btn-danger btn-sm" type="button" data-deactivate-user="${user.USER_ID}">Deactivate</button>` : ''}${canDeactivate && user.IS_ACTIVE !== 1 ? `<button class="btn btn-outline btn-sm" type="button" data-activate-user="${user.USER_ID}">Activate</button>` : ''}${canDelete ? `<button class="btn btn-danger btn-sm" type="button" data-delete-user="${user.USER_ID}">Delete</button>` : ''}</td></tr>`).join('');
     usersBody.querySelectorAll('[data-edit-user]').forEach((button) => button.addEventListener('click', () => openUserModal(Number(button.dataset.editUser))));
     usersBody.querySelectorAll('[data-deactivate-user]').forEach((button) => button.addEventListener('click', () => deactivateUser(Number(button.dataset.deactivateUser))));
+    usersBody.querySelectorAll('[data-activate-user]').forEach((button) => button.addEventListener('click', () => activateUser(Number(button.dataset.activateUser))));
+    usersBody.querySelectorAll('[data-delete-user]').forEach((button) => button.addEventListener('click', () => deleteUser(Number(button.dataset.deleteUser))));
   } catch (err) { showAlert(usersAlert, err.message || 'Unable to load users.'); usersBody.innerHTML = '<tr><td colspan="5" class="empty-state">Could not load users.</td></tr>'; }
 }
 
@@ -80,4 +83,18 @@ async function deactivateUser(userId) {
   if (!user || !confirm(`Deactivate ${user.USERNAME}? They will no longer be able to sign in.`)) return;
   try { await apiFetch(`/api/users/${userId}/deactivate`, { method: 'POST' }); showAlert(usersAlert, 'User deactivated.', 'success'); await loadUsers(); }
   catch (err) { showAlert(usersAlert, err.message || 'Could not deactivate user.'); }
+}
+
+async function activateUser(userId) {
+  const user = users.find((item) => Number(item.USER_ID) === userId);
+  if (!user || !confirm(`Activate ${user.USERNAME}? They will be able to sign in again.`)) return;
+  try { await apiFetch(`/api/users/${userId}/activate`, { method: 'POST' }); showAlert(usersAlert, 'User activated.', 'success'); await loadUsers(); }
+  catch (err) { showAlert(usersAlert, err.message || 'Could not activate user.'); }
+}
+
+async function deleteUser(userId) {
+  const user = users.find((item) => Number(item.USER_ID) === userId);
+  if (!user || !confirm(`Permanently delete ${user.USERNAME}? This cannot be undone.`)) return;
+  try { await apiFetch(`/api/users/${userId}`, { method: 'DELETE' }); showAlert(usersAlert, 'User deleted.', 'success'); await loadUsers(); }
+  catch (err) { showAlert(usersAlert, err.message || 'Could not delete user.'); }
 }

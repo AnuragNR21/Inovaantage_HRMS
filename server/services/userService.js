@@ -84,6 +84,22 @@ async function deactivateUser(userId, actorUserId) {
   if (!result.rowsAffected) throw new UserManagementError(404, 'USER_NOT_FOUND', 'User not found.');
 }
 
+async function activateUser(userId) {
+  const result = await userRepository.activateUser(userId);
+  if (!result.rowsAffected) throw new UserManagementError(404, 'USER_NOT_FOUND', 'User not found.');
+}
+
+async function deleteUser(userId, actorUserId) {
+  if (userId === actorUserId) throw new UserManagementError(403, 'SELF_DELETION_FORBIDDEN', 'You cannot delete your own account.');
+  const user = await getUser(userId);
+  await ensureNotLastSystemAdmin(user);
+  const result = await userRepository.deleteUser(userId);
+  if (result.blocked) {
+    throw new UserManagementError(409, 'USER_HAS_HISTORY', 'This user owns payroll or import history and cannot be deleted. Deactivate the account instead.');
+  }
+  if (!result.rowsAffected) throw new UserManagementError(404, 'USER_NOT_FOUND', 'User not found.');
+}
+
 async function replaceRoles(userId, roles, actorUserId) {
   if (userId === actorUserId) throw new UserManagementError(403, 'SELF_ROLE_CHANGE_FORBIDDEN', 'You cannot change your own roles.');
   const roleCodes = normalizeRoles(roles);
@@ -102,5 +118,5 @@ async function listRoles() {
 
 module.exports = {
   UserManagementError, listUsers, getUser, createUser, updateUser,
-  deactivateUser, replaceRoles, listRoles
+  deactivateUser, activateUser, deleteUser, replaceRoles, listRoles
 };

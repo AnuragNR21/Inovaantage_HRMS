@@ -8,6 +8,8 @@ const policies = [
   ['GET', /^\/api\/users\/\d+$/, [P.USER_VIEW]],
   ['PUT', /^\/api\/users\/\d+$/, [P.USER_UPDATE]],
   ['POST', /^\/api\/users\/\d+\/deactivate$/, [P.USER_DEACTIVATE]],
+  ['POST', /^\/api\/users\/\d+\/activate$/, [P.USER_DEACTIVATE]],
+  ['DELETE', /^\/api\/users\/\d+$/, [P.USER_DELETE]],
   ['PUT', /^\/api\/users\/\d+\/roles$/, [P.USER_UPDATE, P.ROLE_ASSIGN]],
   ['PUT', /^\/api\/users\/\d+\/permissions$/, [P.SYSTEM_CONFIGURE]],
   ['GET', /^\/api\/roles$/, [P.ROLE_VIEW]],

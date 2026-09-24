@@ -98,6 +98,11 @@ async function routeApi(req, res) {
     await userController.deactivateUser(req, res, parseInt(userMatch[1], 10));
     return true;
   }
+  userMatch = pathname.match(/^\/api\/users\/(\d+)\/activate$/);
+  if (userMatch && method === 'POST') {
+    await userController.activateUser(req, res, parseInt(userMatch[1], 10));
+    return true;
+  }
   userMatch = pathname.match(/^\/api\/users\/(\d+)\/roles$/);
   if (userMatch && method === 'PUT') {
     await userController.replaceRoles(req, res, parseInt(userMatch[1], 10));
