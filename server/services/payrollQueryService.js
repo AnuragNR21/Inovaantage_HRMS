@@ -6,7 +6,7 @@ async function listHistory(req, query) {
   const department = String(query.department || '').trim();
   const month = Number.parseInt(query.month, 10);
   const year = Number.parseInt(query.year, 10);
-  const conditions = [];
+  const conditions = ['p.approval_status <> \'FINALIZED\''];
   const binds = {};
 
   if (search) {
@@ -104,7 +104,7 @@ async function listRunReports() {
             SUM(CASE WHEN d.status = 'GENERATED' THEN 1 ELSE 0 END) AS generated_payslips,
             SUM(CASE WHEN j.status = 'SENT' THEN 1 ELSE 0 END) AS emails_sent
        FROM payroll_runs r
-       LEFT JOIN payroll p ON p.run_id = r.run_id
+       JOIN payroll p ON p.run_id = r.run_id AND p.approval_status = 'FINALIZED'
        LEFT JOIN payslip_documents d ON d.payroll_id = p.payroll_id
        LEFT JOIN payslip_email_jobs j ON j.payroll_id = p.payroll_id
       GROUP BY r.run_id, r.pay_month, r.pay_year, r.status, r.created_at,
@@ -134,7 +134,7 @@ async function getRunDetailReport(runId) {
             p.other_deductions, p.total_deductions, p.net_salary, p.remarks
        FROM payroll p
        JOIN employees e ON e.employee_id = p.employee_id
-      WHERE p.run_id = :runId
+      WHERE p.run_id = :runId AND p.approval_status = 'FINALIZED'
       ORDER BY p.employee_code`,
     { runId }
   );

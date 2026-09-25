@@ -8,6 +8,7 @@ test('route policies require all permissions for sensitive operations', () => {
   assert.deepEqual(permissionsForRequest('POST', '/api/salary/upload/confirm'), [P.PAYROLL_UPLOAD, P.PAYROLL_PROCESS, P.SALARY_UPDATE]);
   assert.deepEqual(permissionsForRequest('PUT', '/api/users/42/roles'), [P.USER_UPDATE, P.ROLE_ASSIGN]);
   assert.deepEqual(permissionsForRequest('POST', '/api/payroll/runs/42/approve'), [P.PAYROLL_APPROVE]);
+  assert.deepEqual(permissionsForRequest('POST', '/api/payroll/rows/delete'), [P.PAYROLL_DELETE]);
   assert.deepEqual(permissionsForRequest('POST', '/api/payroll/runs/42/payslips/generate'), [P.PAYSLIP_GENERATE]);
   assert.deepEqual(permissionsForRequest('GET', '/api/payroll/runs/42/payslips'), [P.PAYSLIP_VIEW]);
   assert.deepEqual(permissionsForRequest('GET', '/api/system/configuration'), [P.SYSTEM_CONFIGURE]);

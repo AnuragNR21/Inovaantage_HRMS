@@ -347,6 +347,7 @@ Oracle integration tests are excluded from GitHub-hosted runners because they re
 - Employee self-service queries apply ownership predicates in the data layer.
 - SQL uses bind variables.
 - Uploads validate extension, MIME type, OOXML, dimensions, macros, schema, and data.
+- When enabled, uploaded workbooks are scanned by ClamAV (or a compatible scanner command) before they are read or parsed. Infected files are rejected, and scanner failures are rejected when fail-closed mode is enabled.
 - Imports and state changes use explicit transactions.
 - Payslip downloads enforce authorization and private no-store responses.
 - Bank account and PAN values are masked in employee-facing documents.
@@ -382,6 +383,7 @@ No automatic production deployment is included because a hosting platform and se
 | Duplicate payroll | Resolve each employee conflict and choose which row to keep. |
 | Payslip unavailable | Run/row finalization, hold status, and generation status. |
 | Email stays pending | Email flag, restart, worker process, and SMTP verification. |
+| Malware scan unavailable | Install ClamAV, verify `PAYROLL_MALWARE_SCAN_COMMAND`, enable the scan, and restart the server. |
 | Microsoft rejects mail | SMTP AUTH, credentials, Send As, Conditional Access, firewall, or OAuth policy. |
 
 ## License and Ownership

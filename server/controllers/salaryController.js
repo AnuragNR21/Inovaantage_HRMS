@@ -6,6 +6,7 @@ const payrollImportService = require('../services/payrollImportService');
 const { PayrollDomainError } = require('../domain/payroll/payrollError');
 const { getPayrollImportConfig } = require('../config');
 const auditService = require('../services/auditService');
+const { scanFile } = require('../services/payrollMalwareScanService');
 
 function parseMultipart(req, maxFileBytes) {
   return new Promise((resolve, reject) => {
@@ -69,6 +70,7 @@ async function previewSalary(req, res) {
   if (!file) return sendError(res, 400, 'Attach one .xlsx salary workbook as "file".', 'PAYROLL_FILE_REQUIRED');
   const filepath = file.filepath || file.path;
   try {
+    await scanFile(filepath, config);
     const buffer = await fs.promises.readFile(filepath);
     const result = await payrollImportService.preview({
       payMonth: fieldValue(fields.payMonth),

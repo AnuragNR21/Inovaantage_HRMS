@@ -7,7 +7,7 @@
     "start": "node server/server.js",
     "dev": "node server/server.js",
     "test": "node --test --test-concurrency=1",
-    "test:unit": "node --test --test-concurrency=1 test/audit.unit.test.js test/http.test.js test/passwordService.test.js test/payrollEmail.unit.test.js test/rbac.unit.test.js test/security.test.js",
+    "test:unit": "node --test --test-concurrency=1 test/audit.unit.test.js test/http.test.js test/passwordService.test.js test/payrollEmail.unit.test.js test/payrollMalwareScan.unit.test.js test/rbac.unit.test.js test/security.test.js",
     "build": "node scripts/validate-build.js",
     "verify-email": "node scripts/verify-email.js",
     "migrate:auth": "node scripts/migrate-auth.js",

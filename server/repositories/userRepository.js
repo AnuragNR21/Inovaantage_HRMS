@@ -158,8 +158,9 @@ async function deleteUser(userId) {
   return db.withConnection(async (conn) => {
     const history = await conn.execute(
       `SELECT
-         (SELECT COUNT(*) FROM payroll_imports WHERE created_by = :userId) AS import_count,
-         (SELECT COUNT(*) FROM payroll_runs WHERE created_by = :userId OR approved_by = :userId OR finalized_by = :userId) AS run_count`,
+         (SELECT COUNT(*) FROM payroll_imports WHERE created_by = :userId) import_count,
+         (SELECT COUNT(*) FROM payroll_runs WHERE created_by = :userId OR approved_by = :userId OR finalized_by = :userId) run_count
+       FROM dual`,
       { userId }
     );
     if (Number(history.rows[0].IMPORT_COUNT) > 0 || Number(history.rows[0].RUN_COUNT) > 0) {

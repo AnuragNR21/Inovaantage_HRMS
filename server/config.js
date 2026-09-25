@@ -41,7 +41,11 @@ function getPayrollImportConfig() {
     maxSheets: intFromEnv('PAYROLL_IMPORT_MAX_SHEETS', 10, 1, 50),
     previewTtlMinutes: intFromEnv('PAYROLL_IMPORT_PREVIEW_TTL_MINUTES', 30, 5, 240),
     previewRowLimit: intFromEnv('PAYROLL_IMPORT_PREVIEW_ROW_LIMIT', 50, 10, 200),
-    diagnosticLimit: intFromEnv('PAYROLL_IMPORT_DIAGNOSTIC_LIMIT', 100, 10, 500)
+    diagnosticLimit: intFromEnv('PAYROLL_IMPORT_DIAGNOSTIC_LIMIT', 100, 10, 500),
+    malwareScanEnabled: boolFromEnv('PAYROLL_MALWARE_SCAN_ENABLED', false),
+    malwareScanCommand: String(process.env.PAYROLL_MALWARE_SCAN_COMMAND || 'clamdscan').trim(),
+    malwareScanTimeoutMs: intFromEnv('PAYROLL_MALWARE_SCAN_TIMEOUT_MS', 30000, 1000, 120000),
+    malwareScanFailClosed: boolFromEnv('PAYROLL_MALWARE_SCAN_FAIL_CLOSED', true)
   };
 }
 

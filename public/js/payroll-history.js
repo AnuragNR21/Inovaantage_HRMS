@@ -8,6 +8,7 @@ const selectedCount = document.getElementById('selectedCount');
 const approveSelectedBtn = document.getElementById('approveSelectedBtn');
 const finalizeSelectedBtn = document.getElementById('finalizeSelectedBtn');
 const holdSelectedBtn = document.getElementById('holdSelectedBtn');
+const deleteSelectedBtn = document.getElementById('deleteSelectedBtn');
 const selectAllHeader = document.getElementById('selectAllHeader');
 const selectAllRows = document.getElementById('selectAllRows');
 
@@ -34,6 +35,7 @@ selectAllRows.addEventListener('change', () => setAllSelected(selectAllRows.chec
 approveSelectedBtn.addEventListener('click', () => updateSelectedRows('APPROVE'));
 finalizeSelectedBtn.addEventListener('click', () => updateSelectedRows('FINALIZE'));
 holdSelectedBtn.addEventListener('click', () => updateSelectedRows('HOLD'));
+deleteSelectedBtn.addEventListener('click', () => updateSelectedRows('DELETE'));
 
 async function loadHistory() {
   clearAlert(alertBox);
@@ -54,16 +56,18 @@ async function loadHistory() {
 function renderTable(records) {
   if (!records.length) {
     tableBody.innerHTML = '<tr><td colspan="11" class="empty-state">No payroll records found.</td></tr>';
+    bulkActions.style.display = 'none';
     updateSelectionControls();
     return;
   }
   const canDelete = hasPermission('PAYROLL_DELETE');
   const canApprove = hasPermission('PAYROLL_APPROVE');
   const canFinalize = hasPermission('PAYROLL_FINALIZE');
-  bulkActions.style.display = (canApprove || canFinalize) ? 'flex' : 'none';
+  bulkActions.style.display = (canApprove || canFinalize || canDelete) ? 'flex' : 'none';
   approveSelectedBtn.style.display = canApprove ? '' : 'none';
   finalizeSelectedBtn.style.display = canFinalize ? '' : 'none';
   holdSelectedBtn.style.display = canFinalize ? '' : 'none';
+  deleteSelectedBtn.style.display = canDelete ? '' : 'none';
   tableBody.innerHTML = records.map((r) => `
     <tr>
       <td><input type="checkbox" data-payroll-select="${r.PAYROLL_ID}" ${r.APPROVAL_STATUS === 'FINALIZED' ? 'disabled' : ''} aria-label="Select payroll for ${escapeHtml(r.FULL_NAME)}"></td>
@@ -107,6 +111,7 @@ function updateSelectionControls() {
   approveSelectedBtn.disabled = count === 0;
   finalizeSelectedBtn.disabled = count === 0;
   holdSelectedBtn.disabled = count === 0;
+  deleteSelectedBtn.disabled = count === 0;
   const inputs = [...tableBody.querySelectorAll('[data-payroll-select]:not(:disabled)')];
   const allSelected = inputs.length > 0 && inputs.every((input) => input.checked);
   selectAllHeader.checked = allSelected;
@@ -116,7 +121,7 @@ function updateSelectionControls() {
 async function updateSelectedRows(action) {
   const ids = selectedPayrollIds();
   if (!ids.length) return;
-  const labels = { APPROVE: 'approve', FINALIZE: 'finalize', HOLD: 'put on hold' };
+  const labels = { APPROVE: 'approve', FINALIZE: 'finalize', HOLD: 'put on hold', DELETE: 'delete' };
   if (!confirm(`Are you sure you want to ${labels[action]} ${ids.length} selected payroll record${ids.length === 1 ? '' : 's'}?`)) return;
   try {
     const endpoint = `/api/payroll/rows/${action.toLowerCase()}`;

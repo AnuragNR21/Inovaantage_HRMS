@@ -93,6 +93,10 @@ async function routeApi(req, res) {
     await userController.updateUser(req, res, parseInt(userMatch[1], 10));
     return true;
   }
+  if (userMatch && method === 'DELETE') {
+    await userController.deleteUser(req, res, parseInt(userMatch[1], 10));
+    return true;
+  }
   userMatch = pathname.match(/^\/api\/users\/(\d+)\/deactivate$/);
   if (userMatch && method === 'POST') {
     await userController.deactivateUser(req, res, parseInt(userMatch[1], 10));
@@ -189,6 +193,10 @@ async function routeApi(req, res) {
     return true;
   }
   if (pathname === '/api/payroll/rows/hold' && method === 'POST') {
+    await payrollRunController.updateRows(req, res);
+    return true;
+  }
+  if (pathname === '/api/payroll/rows/delete' && method === 'POST') {
     await payrollRunController.updateRows(req, res);
     return true;
   }

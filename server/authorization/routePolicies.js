@@ -48,6 +48,7 @@ const policies = [
   ['POST', /^\/api\/payroll\/rows\/approve$/, [P.PAYROLL_APPROVE]],
   ['POST', /^\/api\/payroll\/rows\/finalize$/, [P.PAYROLL_FINALIZE]],
   ['POST', /^\/api\/payroll\/rows\/hold$/, [P.PAYROLL_FINALIZE]],
+  ['POST', /^\/api\/payroll\/rows\/delete$/, [P.PAYROLL_DELETE]],
   ['GET', /^\/api\/payroll\/runs\/\d+\/payslips$/, [P.PAYSLIP_VIEW]],
   ['POST', /^\/api\/payroll\/runs\/\d+\/payslips\/generate$/, [P.PAYSLIP_GENERATE]],
   ['GET', /^\/api\/payroll\/runs\/\d+\/emails$/, [P.PAYSLIP_EMAIL]],

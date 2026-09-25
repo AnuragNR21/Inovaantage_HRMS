@@ -1,9 +1,10 @@
 const db = require('../db');
 const payrollWorkflowService = require('./payrollWorkflowService');
+const payrollRepository = require('../repositories/payrollRepository');
 const { PAYROLL_STATES } = require('../domain/payroll/payrollStates');
 const { PayrollDomainError } = require('../domain/payroll/payrollError');
 
-const ACTIONS = Object.freeze({ APPROVE: 'APPROVE', FINALIZE: 'FINALIZE', HOLD: 'HOLD' });
+const ACTIONS = Object.freeze({ APPROVE: 'APPROVE', FINALIZE: 'FINALIZE', HOLD: 'HOLD', DELETE: 'DELETE' });
 
 function placeholders(values, prefix, binds) {
   return values.map((value, index) => {
@@ -28,7 +29,7 @@ async function updateRows({ payrollIds, action, actorUserId }) {
   const ids = normalizeIds(payrollIds);
   const normalizedAction = String(action || '').toUpperCase();
   if (!Object.values(ACTIONS).includes(normalizedAction)) {
-    throw new PayrollDomainError(422, 'PAYROLL_ROW_ACTION_INVALID', 'Action must be APPROVE, FINALIZE, or HOLD.');
+    throw new PayrollDomainError(422, 'PAYROLL_ROW_ACTION_INVALID', 'Action must be APPROVE, FINALIZE, HOLD, or DELETE.');
   }
 
   return db.withConnection(async (conn) => {
@@ -60,7 +61,12 @@ async function updateRows({ payrollIds, action, actorUserId }) {
       }));
 
       for (const row of selectedWithRuns) {
+        if (normalizedAction === ACTIONS.DELETE &&
+            (row.RUN_STATUS !== PAYROLL_STATES.VALIDATED || row.APPROVAL_STATUS === PAYROLL_STATES.FINALIZED)) {
+          throw new PayrollDomainError(409, 'PAYROLL_ROW_STATE_INVALID', 'Only validated payroll rows can be deleted.');
+        }
         const rowStatus = row.APPROVAL_STATUS || PAYROLL_STATES.VALIDATED;
+        if (normalizedAction === ACTIONS.DELETE) continue;
         if (normalizedAction === ACTIONS.APPROVE &&
             !([PAYROLL_STATES.VALIDATED, PAYROLL_STATES.HOLD].includes(rowStatus) &&
               [PAYROLL_STATES.VALIDATED, PAYROLL_STATES.APPROVED, PAYROLL_STATES.FINALIZED].includes(row.RUN_STATUS))) {
@@ -75,6 +81,32 @@ async function updateRows({ payrollIds, action, actorUserId }) {
             [PAYROLL_STATES.DRAFT, PAYROLL_STATES.PROCESSING, PAYROLL_STATES.FAILED].includes(row.RUN_STATUS)) {
           throw new PayrollDomainError(409, 'PAYROLL_ROW_STATE_INVALID', 'Payroll must be validated before a row can be put on hold.');
         }
+      }
+
+      if (normalizedAction === ACTIONS.DELETE) {
+        for (const row of selectedWithRuns) {
+          await payrollRepository.deleteDeliveryArtifactsByRun(conn, row.RUN_ID);
+          await conn.execute('DELETE FROM payroll WHERE payroll_id = :payrollId', { payrollId: row.PAYROLL_ID });
+        }
+        const remainingByRun = new Map();
+        for (const row of selectedWithRuns) {
+          remainingByRun.set(Number(row.RUN_ID), (remainingByRun.get(Number(row.RUN_ID)) || 0) + 1);
+        }
+        for (const [runId] of remainingByRun) {
+          const countResult = await conn.execute(
+            'SELECT COUNT(*) AS row_count FROM payroll WHERE run_id = :runId',
+            { runId }
+          );
+          await conn.execute(
+            `UPDATE payroll_runs
+                SET total_rows = :rowCount, validated_rows = :rowCount,
+                    version_no = version_no + 1, updated_at = SYSTIMESTAMP
+              WHERE run_id = :runId`,
+            { runId, rowCount: Number(countResult.rows[0].ROW_COUNT) }
+          );
+        }
+        await conn.commit();
+        return { action: normalizedAction, updated: selectedWithRuns.length, transitionedRuns: [] };
       }
 
       const nextStatus = normalizedAction === ACTIONS.APPROVE ? PAYROLL_STATES.APPROVED

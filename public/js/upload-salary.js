@@ -190,7 +190,7 @@ uploadBtn.addEventListener('click', async () => {
   clearAlert(alertBox);
   invalidatePreview();
   uploadBtn.disabled = true;
-  uploadBtn.textContent = 'Validating...';
+  uploadBtn.textContent = 'Scanning and validating...';
   const formData = new FormData();
   formData.append('file', selectedFile);
   formData.append('payMonth', payMonthSelect.value);

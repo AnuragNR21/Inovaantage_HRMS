@@ -104,6 +104,8 @@ async function list(conn) {
       WHERE i.status <> 'DELETED'
       GROUP BY i.import_id, i.run_id, i.pay_month, i.pay_year, i.source_file,
                i.file_size, i.status, i.confirmed_at, i.created_at, r.status
+      HAVING NVL(r.status, i.status) <> 'FINALIZED'
+         AND SUM(CASE WHEN p.approval_status = 'FINALIZED' THEN 1 ELSE 0 END) = 0
       ORDER BY i.created_at DESC`
   );
   return result.rows;

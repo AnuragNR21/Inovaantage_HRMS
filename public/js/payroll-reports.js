@@ -23,7 +23,7 @@ function renderSummary() {
   document.getElementById('runCount').textContent = reports.length;
   document.getElementById('employeeCount').textContent = sum('EMPLOYEE_COUNT');
   document.getElementById('totalNet').textContent = fmtMoney(sum('NET_SALARY'));
-  document.getElementById('holdCount').textContent = reports.filter((row) => row.STATUS === 'FAILED').length;
+  document.getElementById('holdCount').textContent = reports.filter((row) => row.STATUS === 'HOLD').length;
 }
 
 function renderReports() {
