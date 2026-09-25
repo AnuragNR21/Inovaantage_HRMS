@@ -18,3 +18,6 @@ uploads/
 storage/
 tmp/
 .DS_Store
+
+.vercel
+.env*

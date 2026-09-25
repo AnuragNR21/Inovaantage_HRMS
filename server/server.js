@@ -58,12 +58,12 @@ function serveStatic(req, res, requestPathname) {
   });
 }
 
-const server = http.createServer(async (req, res) => {
+async function handleRequest(req, res) {
   try {
     applySecurityHeaders(res);
     const healthPath = new URL(req.url, 'http://localhost').pathname;
-    if (healthPath === '/health/live') return sendHealth(res, 200, { status: 'ok' });
-    if (healthPath === '/health/ready') {
+    if (healthPath === '/health/live' || healthPath === '/api/health/live') return sendHealth(res, 200, { status: 'ok' });
+    if (healthPath === '/health/ready' || healthPath === '/api/health/ready') {
       if (!db.isPoolReady()) return sendHealth(res, 503, { status: 'not_ready' });
       try { await db.execute('SELECT 1 AS health_check FROM DUAL'); return sendHealth(res, 200, { status: 'ready' }); }
       catch (_) { return sendHealth(res, 503, { status: 'not_ready' }); }
@@ -91,7 +91,9 @@ const server = http.createServer(async (req, res) => {
       res.end(JSON.stringify({ success: false, message: 'Internal server error.' }));
     }
   }
-});
+}
+
+const server = http.createServer(handleRequest);
 
 async function start() {
   try {
@@ -152,4 +154,6 @@ async function shutdown() {
 process.on('SIGINT', shutdown);
 process.on('SIGTERM', shutdown);
 
-start();
+if (require.main === module) start();
+
+module.exports = { handleRequest, start, server };

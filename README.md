@@ -269,6 +269,14 @@ GET /health/ready
 
 Readiness returns HTTP 200 only when Oracle accepts a query.
 
+### Vercel deployment
+
+The `/api` serverless function reuses the application router and keeps a warm Oracle
+connection pool between invocations. Set the Vercel Production environment variables
+from `.env.example`, including an externally reachable Oracle `DB_CONNECT_STRING` (or
+`DB_HOST` and `DB_SERVICE_NAME`), `DB_USER`, `DB_PASSWORD`, `APP_BASE_URL`, and
+`COOKIE_SECURE=true`. The database firewall must allow Vercel outbound connections.
+
 ## Database Installation
 
 Connect as the application schema owner and execute all scripts in order:
